@@ -8,7 +8,11 @@ import (
 )
 
 // Config 구조체 -> 파싱할 toml 파일의 구조를 따라감
-type Config struct{}
+type Config struct {
+	Paseto struct {
+		Key string
+	}
+}
 
 // NewConfig path 각 서비스에 필요한 환경변수 저장된 파일 경로
 func NewConfig(path string) *Config {
