@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"gRPC/cmd"
 	"gRPC/config"
 )
 
@@ -15,7 +16,9 @@ var configFlag = flag.String("config", "./config.toml", "config path")
 func main() {
 	flag.Parse()
 	fmt.Println("터미널에 go run . config=test", *configFlag)
-	config.NewConfig(*configFlag)
+	cfg := config.NewConfig(*configFlag)
+
+	cmd.NewApp(cfg)
 }
 
 //TIP See GoLand help at <a href="https://www.jetbrains.com/help/go/">jetbrains.com/help/go/</a>.
