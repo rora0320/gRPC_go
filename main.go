@@ -7,6 +7,7 @@ import (
 //TIP To run your code, right-click the code and select <b>Run</b>. Alternatively, click
 // the <icon src="AllIcons.Actions.Execute"/> icon in the gutter and select the <b>Run</b> menu item from here.
 
+// 터미널에 go run . -> main 함수 실행 -> cmd의 app.go(네트워크, 리포지토리,서비스에 대한 객체값 가지고) 실행
 func main() {
 	//TIP Press <shortcut actionId="ShowIntentionActions"/> when your caret is at the underlined or highlighted text
 	// to see how GoLand suggests fixing it.
