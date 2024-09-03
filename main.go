@@ -21,10 +21,14 @@ func main() {
 	cfg := config.NewConfig(*configFlag)
 
 	//서버연결
-	server.NewGRPCServer(cfg)
-	time.Sleep(1e9) //잠시 쉬기
+	if err := server.NewGRPCServer(cfg); err != nil {
+		panic(err)
+	} else {
+		time.Sleep(1e9) //잠시 쉬기
 
-	cmd.NewApp(cfg)
+		cmd.NewApp(cfg)
+	}
+
 }
 
 //TIP See GoLand help at <a href="https://www.jetbrains.com/help/go/">jetbrains.com/help/go/</a>.

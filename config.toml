@@ -1,5 +1,6 @@
 [paseto]
-key = "3333333"
+key = "slkfnvlpoeifajsdasjflakhslkjvbiu"
+#ket = "lkmdsliomfijwlkwjelkfsdlmkflsmdf"
 
 [grpc]
-url = ":1000" #포트번호만 넘기면 됨
+url = ":1000"

@@ -28,18 +28,17 @@ func NewApp(cfg *config.Config) {
 	a := &App{cfg: cfg}
 
 	client.NewGRPCClient(cfg)
-	//1. 리포지토리 - 디비연결 설정
-	if a.repository, err = repository.NewRepository(cfg); err != nil {
+	//3. http 라우터 client <->GRPC 서버 연결
+	if a.gRPCClient, err = client.NewGRPCClient(cfg); err != nil {
+		panic(err)
+
+		//1. 리포지토리 - 디비연결 설정
+	} else if a.repository, err = repository.NewRepository(cfg, a.gRPCClient); err != nil {
 		panic(err)
 
 		//2. 서비스 - 리포지토리로 연결
 	} else if a.service, err = service.NewService(cfg, a.repository); err != nil {
 		panic(err)
-
-		//3. http 라우터 client <->GRPC 서버 연결
-	} else if a.gRPCClient, err = client.NewGRPCClient(cfg); err != nil {
-		panic(err)
-
 		//4. 네트워크(라우터) - 서비스로 연결
 	} else if a.network, err = network.NewNetwork(cfg, a.service, a.gRPCClient); err != nil {
 		panic(err)

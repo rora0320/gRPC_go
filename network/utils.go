@@ -33,6 +33,7 @@ func getAuthToken(c *gin.Context) string {
 	var token string
 
 	authToken := c.Request.Header.Get("Authorization")
+	//Bearer ~~~~~ // split 결과 [Bearer,~~~~~~]
 	authSliced := strings.Split(authToken, " ")
 
 	if len(authSliced) > 1 {
