@@ -4,17 +4,19 @@ syntax = "proto3";
 // option go_package 를 통해 경로를 설정할 수 있음
 option go_package = '/auth';
 
-
+// 데이터 포맷
 message AuthData{
   //고유한 숫자값 지정해야함.
   string token=1;
   int64 createDate=2;
   int64 expireDate = 3;
+  //repeated string items = 5 ->array 로 string 을 여러개 받겠다는 의미
 }
 
+// 데이터 포맷
 message VerifyData{
   //고유한 숫자값 지정해야함.
-  ResponseType status = 1;
+  ResponseType status = 1; //enum 타입의 status
   AuthData auth = 2;
 }
 enum ResponseType{
@@ -44,7 +46,13 @@ message VerifyTokenRes{
   VerifyData v = 1;
 }
 
+//실제 데이터 통신 정의
 service AuthService{
+  // 단방향 unary - 세션유지 X
+  //rpc CreateAuth(CreateTokenReq) returns (CreateTokenRes);
+
+  // 양방향 stream - 세션유지, 소켓통신 같음
+  // rpc UpdateAuth(stream UpdateTokenReq) returns (UpdateTokenRes);
   rpc CreateAuth(CreateTokenReq) returns (CreateTokenRes);
   rpc VerifyAuth(CreateTokenReq) returns (CreateTokenRes);
 }
