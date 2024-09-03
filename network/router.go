@@ -4,6 +4,7 @@ package network
 
 import (
 	"gRPC/config"
+	"gRPC/gRPC/client"
 	"gRPC/service"
 	"github.com/gin-gonic/gin"
 )
@@ -14,11 +15,14 @@ type Network struct {
 
 	// 프레임워크 같은것
 	engin *gin.Engine
+
+	//client 인증서버 -> 네트워크로 보내야해
+	gRPCClient *client.GRPCClient
 }
 
 // NewNetwork 라우터->서비스
-func NewNetwork(cfg *config.Config, service *service.Service) (*Network, error) {
-	r := &Network{cfg: cfg, service: service, engin: gin.New()}
+func NewNetwork(cfg *config.Config, service *service.Service, gRPCClient *client.GRPCClient) (*Network, error) {
+	r := &Network{cfg: cfg, service: service, engin: gin.New(), gRPCClient: gRPCClient}
 
 	return r, nil
 }

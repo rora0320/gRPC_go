@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"gRPC/cmd"
 	"gRPC/config"
+	"gRPC/gRPC/server"
+	"time"
 )
 
 //TIP To run your code, right-click the code and select <b>Run</b>. Alternatively, click
@@ -17,6 +19,10 @@ func main() {
 	flag.Parse()
 	fmt.Println("터미널에 go run . config=test", *configFlag)
 	cfg := config.NewConfig(*configFlag)
+
+	//서버연결
+	server.NewGRPCServer(cfg)
+	time.Sleep(1e9) //잠시 쉬기
 
 	cmd.NewApp(cfg)
 }

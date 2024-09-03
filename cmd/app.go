@@ -4,6 +4,7 @@ package cmd
 
 import (
 	"gRPC/config"
+	"gRPC/gRPC/client"
 	"gRPC/network"
 	"gRPC/repository"
 	"gRPC/service"
@@ -15,6 +16,8 @@ type App struct {
 	network    *network.Network
 	repository *repository.Repository
 	service    *service.Service
+
+	gRPCClient *client.GRPCClient
 }
 
 // NewApp 리포지토리, 서비스, 네트워크에 대한 객체값이 필요해- 앱
@@ -24,6 +27,7 @@ func NewApp(cfg *config.Config) {
 
 	a := &App{cfg: cfg}
 
+	client.NewGRPCClient(cfg)
 	//리포지토리 - 디비연결 설정
 	if a.repository, err = repository.NewRepository(cfg); err != nil {
 		panic(err)
@@ -33,7 +37,9 @@ func NewApp(cfg *config.Config) {
 		panic(err)
 
 		//네트워크(라우터) - 서비스로 연결
-	} else if a.network, err = network.NewNetwork(cfg, a.service); err != nil {
+	} else if a.gRPCClient, err = client.NewGRPCClient(cfg); err != nil {
+		panic(err)
+	} else if a.network, err = network.NewNetwork(cfg, a.service, a.gRPCClient); err != nil {
 		panic(err)
 	} else {
 		//TODO -> start server
