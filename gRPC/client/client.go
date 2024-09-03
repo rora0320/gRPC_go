@@ -11,7 +11,7 @@ import (
 )
 
 type GRPCClient struct {
-	prgcClient *grpc.ClientConn
+	grpcClient *grpc.ClientConn
 
 	//proto 에서 생성된 authServiceClient
 	authClient auth.AuthServiceClient
@@ -25,11 +25,11 @@ func NewGRPCClient(cfg *config.Config) (*GRPCClient, error) {
 	c := new(GRPCClient)
 
 	// prgc 패키지 내 WithTransportCredentials
-	if prgcClient, err := grpc.NewClient(cfg.GRPC.URL, grpc.WithTransportCredentials(insecure.NewCredentials())); err != nil {
+	if client, err := grpc.NewClient(cfg.GRPC.URL, grpc.WithTransportCredentials(insecure.NewCredentials())); err != nil {
 		return nil, err
 	} else {
-		c.prgcClient = prgcClient
-		c.authClient = auth.NewAuthServiceClient(c.prgcClient)
+		c.grpcClient = client
+		c.authClient = auth.NewAuthServiceClient(c.grpcClient)
 		c.pasetoMaker = paseto.NewPasetoMaker(cfg)
 	}
 	return c, nil
