@@ -1,15 +1,19 @@
 package client
 
 import (
+	"context"
 	"gRPC/config"
 	"gRPC/gRPC/paseto"
 	auth "gRPC/gRPC/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"time"
 )
 
 type GRPCClient struct {
 	prgcClient *grpc.ClientConn
+
+	//proto 에서 생성된 authServiceClient
 	authClient auth.AuthServiceClient
 
 	// paseto 사용해야하니까
@@ -33,10 +37,33 @@ func NewGRPCClient(cfg *config.Config) (*GRPCClient, error) {
 //rpc CreateAuth(CreateTokenReq) returns (CreateTokenRes);
 //rpc VerifyAuth(CreateTokenReq) returns (CreateTokenRes);
 
-func (g *GRPCClient) CreateAuth(address string) (*auth.AuthData, error) {
-	return nil, nil
+func (g *GRPCClient) CreateAuth(email string) (*auth.AuthData, error) {
+	nowTime := time.Now()
+	expiredTime := nowTime.Add(30 * time.Minute) // 만료시간 설정
+
+	clientAuth := &auth.AuthData{
+		Email:      email,
+		CreateDate: nowTime.Unix(),
+		ExpireDate: expiredTime.Unix(),
+	}
+
+	if token, err := g.pasetoMaker.CreateNewToken(clientAuth); err != nil {
+		return nil, err
+	} else {
+		clientAuth.Token = token
+		//서버에 있는 CreateAuth 를 타게됨 그래서 서버가 항상 켜져있어야해
+		if response, err := g.authClient.CreateAuth(context.Background(), &auth.CreateTokenReq{Auth: clientAuth}); err != nil {
+			return nil, err
+		} else {
+			return response.Auth, nil
+		}
+	}
 }
 
-func (g *GRPCClient) VerifyAuth(token string) (*auth.VerifyTokenRes, error) {
-	return nil, nil
+func (g *GRPCClient) VerifyAuth(token string) (*auth.VerifyData, error) {
+	if response, err := g.authClient.VerifyAuth(context.Background(), &auth.VerifyTokenReq{Token: token}); err != nil {
+		return nil, err
+	} else {
+		return response.V, nil
+	}
 }

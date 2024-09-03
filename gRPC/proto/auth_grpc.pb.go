@@ -34,7 +34,7 @@ type AuthServiceClient interface {
 	// 양방향 stream - 세션유지, 소켓통신 같음
 	// rpc UpdateAuth(stream UpdateTokenReq) returns (UpdateTokenRes);
 	CreateAuth(ctx context.Context, in *CreateTokenReq, opts ...grpc.CallOption) (*CreateTokenRes, error)
-	VerifyAuth(ctx context.Context, in *CreateTokenReq, opts ...grpc.CallOption) (*CreateTokenRes, error)
+	VerifyAuth(ctx context.Context, in *VerifyTokenReq, opts ...grpc.CallOption) (*VerifyTokenRes, error)
 }
 
 type authServiceClient struct {
@@ -55,9 +55,9 @@ func (c *authServiceClient) CreateAuth(ctx context.Context, in *CreateTokenReq, 
 	return out, nil
 }
 
-func (c *authServiceClient) VerifyAuth(ctx context.Context, in *CreateTokenReq, opts ...grpc.CallOption) (*CreateTokenRes, error) {
+func (c *authServiceClient) VerifyAuth(ctx context.Context, in *VerifyTokenReq, opts ...grpc.CallOption) (*VerifyTokenRes, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(CreateTokenRes)
+	out := new(VerifyTokenRes)
 	err := c.cc.Invoke(ctx, AuthService_VerifyAuth_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -74,7 +74,7 @@ type AuthServiceServer interface {
 	// 양방향 stream - 세션유지, 소켓통신 같음
 	// rpc UpdateAuth(stream UpdateTokenReq) returns (UpdateTokenRes);
 	CreateAuth(context.Context, *CreateTokenReq) (*CreateTokenRes, error)
-	VerifyAuth(context.Context, *CreateTokenReq) (*CreateTokenRes, error)
+	VerifyAuth(context.Context, *VerifyTokenReq) (*VerifyTokenRes, error)
 	mustEmbedUnimplementedAuthServiceServer()
 }
 
@@ -88,7 +88,7 @@ type UnimplementedAuthServiceServer struct{}
 func (UnimplementedAuthServiceServer) CreateAuth(context.Context, *CreateTokenReq) (*CreateTokenRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateAuth not implemented")
 }
-func (UnimplementedAuthServiceServer) VerifyAuth(context.Context, *CreateTokenReq) (*CreateTokenRes, error) {
+func (UnimplementedAuthServiceServer) VerifyAuth(context.Context, *VerifyTokenReq) (*VerifyTokenRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method VerifyAuth not implemented")
 }
 func (UnimplementedAuthServiceServer) mustEmbedUnimplementedAuthServiceServer() {}
@@ -131,7 +131,7 @@ func _AuthService_CreateAuth_Handler(srv interface{}, ctx context.Context, dec f
 }
 
 func _AuthService_VerifyAuth_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateTokenReq)
+	in := new(VerifyTokenReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -143,7 +143,7 @@ func _AuthService_VerifyAuth_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: AuthService_VerifyAuth_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).VerifyAuth(ctx, req.(*CreateTokenReq))
+		return srv.(AuthServiceServer).VerifyAuth(ctx, req.(*VerifyTokenReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }

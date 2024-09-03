@@ -7,6 +7,7 @@ option go_package = '/auth';
 // 데이터 포맷
 message AuthData{
   //고유한 숫자값 지정해야함.
+  string email = 4;
   string token=1;
   int64 createDate=2;
   int64 expireDate = 3;
@@ -54,5 +55,5 @@ service AuthService{
   // 양방향 stream - 세션유지, 소켓통신 같음
   // rpc UpdateAuth(stream UpdateTokenReq) returns (UpdateTokenRes);
   rpc CreateAuth(CreateTokenReq) returns (CreateTokenRes);
-  rpc VerifyAuth(CreateTokenReq) returns (CreateTokenRes);
+  rpc VerifyAuth(VerifyTokenReq) returns (VerifyTokenRes);
 }

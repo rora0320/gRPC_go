@@ -2,6 +2,7 @@ package paseto
 
 import (
 	"gRPC/config"
+	auth "gRPC/gRPC/proto"
 	"github.com/o1egl/paseto"
 )
 
@@ -18,7 +19,7 @@ func NewPasetoMaker(cfg *config.Config) *PasetoMaker {
 }
 
 // CreateNewToken 토큰 생성 proto를 통해서
-func (m *PasetoMaker) CreateNewToken() (string, error) {
+func (m *PasetoMaker) CreateNewToken(clientAuth *auth.AuthData) (string, error) {
 	return "", nil
 }
 
