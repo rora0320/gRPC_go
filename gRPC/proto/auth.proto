@@ -22,7 +22,7 @@ message VerifyData{
 enum ResponseType{
   SUCCESS = 0;
   FAILED = 1;
-  EXPIERD_DATE = 2;
+  EXPIRED_DATE = 2;
 }
 
 //토큰생성 요청

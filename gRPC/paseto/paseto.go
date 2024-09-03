@@ -17,7 +17,7 @@ func NewPasetoMaker(cfg config.Config) *PasetoMaker {
 	}
 }
 
-// CreateNewToken 토큰 생성
+// CreateNewToken 토큰 생성 proto를 통해서
 func (m *PasetoMaker) CreateNewToken() (string, error) {
 	return "", nil
 }
