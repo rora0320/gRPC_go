@@ -16,7 +16,7 @@ type GRPCClient struct {
 	//proto 에서 생성된 authServiceClient
 	authClient auth.AuthServiceClient
 
-	// paseto 사용해야하니까
+	// paseto 사용해야하니까 객체 심어두기
 	pasetoMaker *paseto.PasetoMaker
 }
 
@@ -47,6 +47,7 @@ func (g *GRPCClient) CreateAuth(email string) (*auth.AuthData, error) {
 		ExpireDate: expiredTime.Unix(),
 	}
 
+	//paseto의 CreateNewToken 메소드 호출
 	if token, err := g.pasetoMaker.CreateNewToken(clientAuth); err != nil {
 		return nil, err
 	} else {
