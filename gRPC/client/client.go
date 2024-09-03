@@ -20,7 +20,7 @@ type GRPCClient struct {
 	pasetoMaker *paseto.PasetoMaker
 }
 
-// 인증서버로 사용할 예정
+// NewGRPCClient 인증서버로 사용할 예정
 func NewGRPCClient(cfg *config.Config) (*GRPCClient, error) {
 	c := new(GRPCClient)
 
