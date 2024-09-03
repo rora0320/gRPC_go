@@ -12,6 +12,9 @@ type Config struct {
 	Paseto struct {
 		Key string
 	}
+	GRPC struct {
+		URL string
+	}
 }
 
 // NewConfig path 각 서비스에 필요한 환경변수 저장된 파일 경로
