@@ -2,11 +2,13 @@ package server
 
 import (
 	"context"
+	"errors"
 	"gRPC/config"
 	"gRPC/gRPC/paseto"
 	auth "gRPC/gRPC/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
+	"log"
 	"net"
 	"time"
 )
@@ -62,11 +64,17 @@ func (s *GRPCServer) VerifyAuth(_ context.Context, req *auth.VerifyTokenReq) (*a
 	//응답의 status 업데이트
 	if authData, ok := s.tokenVerifyMap[token]; !ok {
 		res.V.Status = auth.ResponseType_FAILED
+		return res, errors.New("토큰없음")
+	} else if err := s.pasetoMaker.VerifyToken(token); err != nil {
+		log.Println("errr????", err)
+		res.V.Status = auth.ResponseType_FAILED
+		return res, errors.New("잘못된 토큰")
 	} else if authData.ExpireDate < time.Now().Unix() {
 		delete(s.tokenVerifyMap, token)
 		res.V.Status = auth.ResponseType_EXPIRED_DATE
+		return res, errors.New("토큰만료 됨")
 	} else {
 		res.V.Status = auth.ResponseType_SUCCESS
+		return res, nil
 	}
-	return res, nil
 }

@@ -19,7 +19,7 @@ func (n *Network) verifyLogin() gin.HandlerFunc {
 		} else {
 			// 토큰 있어도 토큰에 문제가 있으면 권한없음으로 거정
 			if _, err := n.gRPCClient.VerifyAuth(BearerToken); err != nil {
-				c.JSON(http.StatusUnauthorized, err)
+				c.JSON(http.StatusUnauthorized, err.Error())
 				c.Abort()
 			} else {
 				c.Next()

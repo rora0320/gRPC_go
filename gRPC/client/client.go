@@ -49,7 +49,7 @@ func (g *GRPCClient) CreateAuth(email string) (*auth.AuthData, error) {
 	}
 
 	//paseto의 CreateNewToken 메소드 호출
-	if token, err := g.pasetoMaker.CreateNewToken(clientAuth); err != nil {
+	if token, err := g.pasetoMaker.CreateNewToken(*clientAuth); err != nil {
 		return nil, err
 	} else {
 		clientAuth.Token = token
